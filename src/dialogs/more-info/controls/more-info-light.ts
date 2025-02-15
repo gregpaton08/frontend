@@ -40,6 +40,7 @@ import "../components/lights/ha-more-info-light-favorite-colors";
 import "../components/lights/light-color-rgb-picker";
 import "../components/lights/light-color-temp-picker";
 import { moreInfoControlStyle } from "../components/more-info-control-style";
+import { rgb2hex } from "../../../common/color/convert-color";
 
 type MainControl = "brightness" | "color_temp" | "color";
 
@@ -74,6 +75,9 @@ class MoreInfoLight extends LitElement {
   }
 
   private get _stateOverride() {
+    if (this._mainControl === "color" && this.stateObj?.attributes.rgb_color) {
+      return rgb2hex(this.stateObj.attributes.rgb_color);
+    }
     if (this.stateObj?.attributes.brightness) {
       return this.hass.formatEntityAttributeValue(this.stateObj!, "brightness");
     }
